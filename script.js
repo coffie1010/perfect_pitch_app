@@ -10,7 +10,7 @@ octaves.forEach(oct => {
     whiteNotes.push(name + oct);
   });
 });
-whiteNotes.push("C6"); // 最上のCも忘れず追加♪
+whiteNotes.push("C6");
 
 let currentNote = null;
 let previousIndex = null;
@@ -32,34 +32,33 @@ const playButton = document.getElementById("playNote");
 async function initAudio() {
   if (!started) {
     await Tone.start();
-    synth = new Tone.Synth().toDestination();
+    synth = new Tone.Synth({
+      oscillator: { type: "triangle" }, // 少し音色くっきり♪
+      envelope: { attack: 0.01, decay: 0.1, sustain: 0.4, release: 0.5 }
+    }).toDestination();
     started = true;
   }
 }
 
-// ▶ ボタン押したら出題（前回から7音以上ズラす）
 playButton.addEventListener("click", async () => {
   await initAudio();
 
-  let index;
-  do {
-    index = Math.floor(Math.random() * whiteNotes.length);
-  } while (
-    previousIndex !== null &&
-    Math.abs(index - previousIndex) < 7
-  );
+  const candidates = whiteNotes
+    .map((note, i) => ({ note, i }))
+    .filter(({ i }) => previousIndex === null || Math.abs(i - previousIndex) >= 7);
 
-  currentNote = whiteNotes[index];
-  previousIndex = index;
+  const chosen = candidates[Math.floor(Math.random() * candidates.length)];
+  currentNote = chosen.note;
+  previousIndex = chosen.i;
 
   synth.triggerAttackRelease(currentNote, "1n");
   result.textContent = "どの音かな？クリックしてね♡";
 });
 
-// 鍵盤を押したときの判定
 function handleClick(note) {
   if (!started) return;
   synth.triggerAttackRelease(note, "1n");
+
   if (!currentNote) return;
 
   const name = note.charAt(0);
@@ -73,7 +72,7 @@ function handleClick(note) {
   currentNote = null;
 }
 
-// 鍵盤を全部つくる（C3〜C6）
+// 鍵盤作成（C3〜C6）
 whiteNotes.forEach(note => {
   const name = note.charAt(0);
 
