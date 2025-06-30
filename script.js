@@ -47,7 +47,7 @@ playButton.addEventListener("click", async () => {
 
   const candidates = whiteNotes
     .map((note, i) => ({ note, i }))
-    .filter(({ i }) => previousIndex === null || Math.abs(i - previousIndex) >= 7);
+    .filter(({ i }) => previousIndex === null || Math.abs(i - previousIndex) >= 4);
 
   const chosen = candidates[Math.floor(Math.random() * candidates.length)];
   currentNote = chosen.note;
