@@ -2,17 +2,18 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>絶対音感トレーニング - 2オクターブ</title>
+  <title>絶対音感トレーニング（with 記録）</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.39/Tone.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <h1>🎵 絶対音感トレーニング（C3〜C5）</h1>
   <button id="playNote">▶ 問題を再生</button>
-  <div id="keyboard-wrapper">
-    <div id="keyboard"></div>
-  </div>
+  <div id="keyboard-wrapper"><div id="keyboard"></div></div>
   <div id="result"></div>
+  <h2>📊 日別正答率</h2>
+  <canvas id="scoreChart" width="400" height="200"></canvas>
   <script src="script.js"></script>
 </body>
 </html>
