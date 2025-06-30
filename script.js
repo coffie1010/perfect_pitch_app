@@ -1,4 +1,4 @@
-elet synth = null;
+let synth = null;
 let started = false;
 
 const octaves = [3, 4];
