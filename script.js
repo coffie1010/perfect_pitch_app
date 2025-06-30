@@ -10,7 +10,7 @@ octaves.forEach(oct => {
     whiteNotes.push(name + oct);
   });
 });
-whiteNotes.push("C6"); // 最上のCを追加
+whiteNotes.push("C6"); // 最上のCも忘れず追加♪
 
 let currentNote = null;
 let previousIndex = null;
@@ -29,7 +29,6 @@ const keyboard = document.getElementById("keyboard");
 const result = document.getElementById("result");
 const playButton = document.getElementById("playNote");
 
-// 初回タップで音声初期化
 async function initAudio() {
   if (!started) {
     await Tone.start();
@@ -38,7 +37,7 @@ async function initAudio() {
   }
 }
 
-// 出題：前回と1オクターブ（7音）以上離れた音を選ぶ
+// ▶ ボタン押したら出題（前回から7音以上ズラす）
 playButton.addEventListener("click", async () => {
   await initAudio();
 
@@ -57,17 +56,14 @@ playButton.addEventListener("click", async () => {
   result.textContent = "どの音かな？クリックしてね♡";
 });
 
-// 回答処理
+// 鍵盤を押したときの判定
 function handleClick(note) {
   if (!started) return;
   synth.triggerAttackRelease(note, "1n");
-
   if (!currentNote) return;
 
   const name = note.charAt(0);
-  const correct = note === currentNote;
-
-  if (correct) {
+  if (note === currentNote) {
     const color = noteColors[name];
     result.innerHTML = `✅ すごーいっ♡ 正解！<br>${note}: <span style="color:${color.code}">${color.label}</span>`;
   } else {
@@ -77,7 +73,7 @@ function handleClick(note) {
   currentNote = null;
 }
 
-// 鍵盤生成（C3〜C6）
+// 鍵盤を全部つくる（C3〜C6）
 whiteNotes.forEach(note => {
   const name = note.charAt(0);
 
