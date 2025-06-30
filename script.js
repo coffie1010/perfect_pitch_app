@@ -1,7 +1,6 @@
 let synth = null;
 let started = false;
 
-// 音階データ：C3〜C5（21音）
 const octaves = [3, 4];
 const whiteNoteNames = ["C", "D", "E", "F", "G", "A", "B"];
 const whiteNotes = [];
@@ -43,9 +42,19 @@ playButton.addEventListener("click", async () => {
   const types = ["sine", "triangle", "square", "sawtooth"];
   const randomType = types[Math.floor(Math.random() * types.length)];
 
+  // 🔊 波形ごとの音量補正
+  let volumeAdjust = 0;
+  switch (randomType) {
+    case "sawtooth": volumeAdjust = -8; break;
+    case "square":   volumeAdjust = -5; break;
+    case "triangle": volumeAdjust = -2; break;
+    case "sine":     volumeAdjust = 0; break;
+  }
+
   synth = new Tone.Synth({
     oscillator: { type: randomType },
-    envelope: { attack: 0.01, decay: 0.1, sustain: 0.4, release: 0.5 }
+    envelope: { attack: 0.01, decay: 0.1, sustain: 0.4, release: 0.5 },
+    volume: volumeAdjust
   }).toDestination();
 
   const candidates = whiteNotes
@@ -58,7 +67,7 @@ playButton.addEventListener("click", async () => {
 
   setTimeout(() => {
     synth.triggerAttackRelease(currentNote, "1n");
-  }, 20); // 💡 安定のためちょい待ち
+  }, 20);
 
   result.innerHTML = `🎛️ <span style="font-size:0.9em; color:#999;">音色: ${randomType}</span><br>どの音かな？クリックしてね♡`;
 });
