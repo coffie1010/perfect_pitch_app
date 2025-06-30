@@ -1,54 +1,18 @@
-body {
-  text-align: center;
-  font-family: sans-serif;
-  background: #f0f0f0;
-  padding: 20px;
-}
-
-#keyboard-wrapper {
-  display: flex;
-  justify-content: center;
-  overflow-x: auto;
-  margin-top: 20px;
-}
-
-#keyboard {
-  display: flex;
-  height: 230px;
-}
-
-.key-wrapper {
-  position: relative;
-  width: 50px;
-  height: 230px;
-}
-
-.white-key {
-  width: 100%;
-  height: 200px;
-  border: 1px solid #333;
-  box-sizing: border-box;
-  position: relative;
-  cursor: pointer;
-  z-index: 1;
-}
-
-.key-label {
-  position: absolute;
-  bottom: 5px;
-  width: 100%;
-  text-align: center;
-  font-weight: bold;
-  font-size: 14px;
-  color: #333;
-  pointer-events: none;
-}
-
-.white-key:hover {
-  opacity: 0.8;
-}
-
-#result {
-  margin-top: 20px;
-  font-size: 1.2em;
-}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>絶対音感トレーニング - 3オクターブ</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.39/Tone.min.js"></script>
+</head>
+<body>
+  <h1>🎵 絶対音感トレーニング（C3〜C6）</h1>
+  <button id="playNote">▶ 問題を再生</button>
+  <div id="keyboard-wrapper">
+    <div id="keyboard"></div>
+  </div>
+  <div id="result"></div>
+  <script src="script.js"></script>
+</body>
+</html>
