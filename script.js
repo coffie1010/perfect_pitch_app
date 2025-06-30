@@ -69,7 +69,7 @@ playButton.addEventListener("click", async () => {
     synth.triggerAttackRelease(currentNote, "1n");
   }, 20);
 
-  result.innerHTML = どの音かな？クリックしてね♡`;
+  result.innerHTML = "どの音かな？クリックしてね♡";
 });
 
 function handleClick(note) {
