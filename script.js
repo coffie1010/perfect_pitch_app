@@ -1,9 +1,9 @@
 let synth = null;
 let started = false;
 
-const octaves = [4, 5];
+const octaves = [3, 4, ];
 const whiteNoteNames = ["C", "D", "E", "F", "G", "A", "B"];
-const whiteNotes = [];
+const whiteNotes = ["c5"];
 
 octaves.forEach(oct => {
   whiteNoteNames.forEach(name => {
