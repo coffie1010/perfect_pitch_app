@@ -8,6 +8,7 @@ body {
 #keyboard-wrapper {
   display: flex;
   justify-content: center;
+  overflow-x: auto;
   margin-top: 20px;
 }
 
@@ -18,7 +19,7 @@ body {
 
 .key-wrapper {
   position: relative;
-  width: 60px;
+  width: 50px;
   height: 230px;
 }
 
@@ -42,19 +43,6 @@ body {
   color: #333;
   pointer-events: none;
 }
-
-/* カラー（C4〜C5） */
-.key-C4 { background: #f0f0f0; }   /* ソフトグレー白 */
-.key-D4 { background: #ffe476; }   /* はっきりしたパステルイエロー */
-.key-E4 { background: #92dc92; }   /* やや濃いミントグリーン */
-.key-F4 { background: #7fbfff; }   /* スカイブルー寄りの青 */
-.key-G4 { background: #66d6d3; }   /* 青緑のバランスがよい水色 */
-.key-A4 { background: #ff8f79; }   /* やわらかめの朱色サーモン */
-.key-B4 { background: #c792eb; }   /* 落ち着いた藤紫 */
-.key-C5 { background: #eaeaea; }   /* アイボリーホワイト */
-
-
-
 
 .white-key:hover {
   opacity: 0.8;
