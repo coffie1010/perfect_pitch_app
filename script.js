@@ -1,8 +1,7 @@
 let synth = null;
 let started = false;
 
-// C3〜C5（2オクターブ）
-const octaves = [3, 4];
+const octaves = [3, 4]; // C3〜B4
 const whiteNoteNames = ["C", "D", "E", "F", "G", "A", "B"];
 const whiteNotes = [];
 
@@ -11,7 +10,7 @@ octaves.forEach(oct => {
     whiteNotes.push(name + oct);
   });
 });
-whiteNotes.push("C5"); // 最上のC
+whiteNotes.push("C5"); // 上端
 
 let currentNote = null;
 let previousIndex = null;
@@ -33,18 +32,23 @@ const playButton = document.getElementById("playNote");
 async function initAudio() {
   if (!started) {
     await Tone.start();
-    synth = new Tone.Synth({
-      oscillator: { type: "triangle" },
-      envelope: { attack: 0.01, decay: 0.1, sustain: 0.4, release: 0.5 }
-    }).toDestination();
     started = true;
   }
 }
 
-// ▶ 出題（前回と7音以上離す）
 playButton.addEventListener("click", async () => {
   await initAudio();
 
+  // 🎛️ ランダム音色
+  const types = ["sine", "triangle", "square", "sawtooth"];
+  const randomType = types[Math.floor(Math.random() * types.length)];
+
+  synth = new Tone.Synth({
+    oscillator: { type: randomType },
+    envelope: { attack: 0.01, decay: 0.1, sustain: 0.4, release: 0.5 }
+  }).toDestination();
+
+  // 出題（4音以上離す）
   const candidates = whiteNotes
     .map((note, i) => ({ note, i }))
     .filter(({ i }) => previousIndex === null || Math.abs(i - previousIndex) >= 4);
@@ -54,10 +58,10 @@ playButton.addEventListener("click", async () => {
   previousIndex = chosen.i;
 
   synth.triggerAttackRelease(currentNote, "1n");
-  result.textContent = "どの音かな？クリックしてね♡";
+
+  result.innerHTML = `🎛️ <span style="font-size:0.9em; color:#999;">音色: ${randomType}</span><br>どの音かな？クリックしてね♡`;
 });
 
-// 解答処理
 function handleClick(note) {
   if (!started) return;
   synth.triggerAttackRelease(note, "1n");
@@ -65,10 +69,9 @@ function handleClick(note) {
 
   const name = currentNote.charAt(0);
   const color = noteColors[name];
-
   const colorStyle = name === "C"
-    ? 'color: #333; background: #f0f0f0; padding: 2px 6px; border-radius: 4px;'
-    : `color: ${color.code}`;
+    ? 'color:#333; background:#f0f0f0; padding:2px 6px; border-radius:4px;'
+    : `color:${color.code}`;
 
   if (note === currentNote) {
     result.innerHTML = `✅ すごーいっ♡ 正解！<br>${currentNote}: <span style="${colorStyle}">${color.label}</span>`;
@@ -79,7 +82,6 @@ function handleClick(note) {
   currentNote = null;
 }
 
-// 鍵盤生成
 whiteNotes.forEach(note => {
   const name = note.charAt(0);
   const wrapper = document.createElement("div");
