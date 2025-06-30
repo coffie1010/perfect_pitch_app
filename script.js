@@ -10,10 +10,10 @@ octaves.forEach(oct => {
     whiteNotes.push(name + oct);
   });
 });
-whiteNotes.push("C6");
+whiteNotes.push("C6"); // 最上のCを追加
 
-let previousIndex = null;
 let currentNote = null;
+let previousIndex = null;
 
 const noteColors = {
   "C": { label: "白", code: "#f0f0f0" },
@@ -29,6 +29,7 @@ const keyboard = document.getElementById("keyboard");
 const result = document.getElementById("result");
 const playButton = document.getElementById("playNote");
 
+// 初回タップで音声初期化
 async function initAudio() {
   if (!started) {
     await Tone.start();
@@ -37,58 +38,62 @@ async function initAudio() {
   }
 }
 
-// 出題：1音再生、ただし前回と1oct以上離す
+// 出題：前回と1オクターブ（7音）以上離れた音を選ぶ
 playButton.addEventListener("click", async () => {
   await initAudio();
 
-  let currentIndex;
+  let index;
   do {
-    currentIndex = Math.floor(Math.random() * whiteNotes.length);
+    index = Math.floor(Math.random() * whiteNotes.length);
   } while (
     previousIndex !== null &&
-    Math.abs(currentIndex - previousIndex) < 7 // 少なくとも1オクターブは離す
+    Math.abs(index - previousIndex) < 7
   );
 
-  currentNote = whiteNotes[currentIndex];
-  previousIndex = currentIndex;
+  currentNote = whiteNotes[index];
+  previousIndex = index;
 
   synth.triggerAttackRelease(currentNote, "1n");
-  result.textContent = "どの音？ 鍵盤をクリック！";
+  result.textContent = "どの音かな？クリックしてね♡";
 });
 
-// 判定
+// 回答処理
 function handleClick(note) {
   if (!started) return;
   synth.triggerAttackRelease(note, "1n");
+
   if (!currentNote) return;
 
-  const noteName = note.charAt(0);
-  if (note === currentNote) {
-    const colorInfo = noteColors[noteName];
-    result.innerHTML = `✅ 正解！<br>${note}: <span style="color:${colorInfo.code}">${colorInfo.label}</span>`;
+  const name = note.charAt(0);
+  const correct = note === currentNote;
+
+  if (correct) {
+    const color = noteColors[name];
+    result.innerHTML = `✅ すごーいっ♡ 正解！<br>${note}: <span style="color:${color.code}">${color.label}</span>`;
   } else {
-    result.textContent = `❌ 不正解… 正解は ${currentNote}`;
+    result.textContent = `❌ ううん… 正解は ${currentNote} だよっ`;
   }
 
   currentNote = null;
 }
 
-// 鍵盤
+// 鍵盤生成（C3〜C6）
 whiteNotes.forEach(note => {
-  const noteName = note.charAt(0);
+  const name = note.charAt(0);
+
   const wrapper = document.createElement("div");
   wrapper.className = "key-wrapper";
 
   const key = document.createElement("div");
   key.className = "white-key";
-  key.style.background = noteColors[noteName].code;
+  key.style.background = noteColors[name].code;
   key.dataset.note = note;
   key.addEventListener("click", () => handleClick(note));
   wrapper.appendChild(key);
 
   const label = document.createElement("div");
   label.className = "key-label";
-  label.textContent = noteName;
+  label.textContent = name;
   wrapper.appendChild(label);
 
   keyboard.appendChild(wrapper);
