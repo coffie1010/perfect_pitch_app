@@ -1,7 +1,8 @@
 let synth = null;
 let started = false;
 
-const octaves = [3, 4]; // C3〜B4
+// C3〜C5（21音）
+const octaves = [3, 4];
 const whiteNoteNames = ["C", "D", "E", "F", "G", "A", "B"];
 const whiteNotes = [];
 
@@ -10,7 +11,7 @@ octaves.forEach(oct => {
     whiteNotes.push(name + oct);
   });
 });
-whiteNotes.push("C5"); // 上端
+whiteNotes.push("C5"); // 上のCを追加
 
 let currentNote = null;
 let previousIndex = null;
@@ -29,6 +30,7 @@ const keyboard = document.getElementById("keyboard");
 const result = document.getElementById("result");
 const playButton = document.getElementById("playNote");
 
+// オーディオ初期化（1回だけ）
 async function initAudio() {
   if (!started) {
     await Tone.start();
@@ -36,19 +38,20 @@ async function initAudio() {
   }
 }
 
+// ▶ 出題ボタン押下
 playButton.addEventListener("click", async () => {
   await initAudio();
 
-  // 🎛️ ランダム音色
+  // 🎛️ 音色ランダム
+  if (synth) synth.dispose(); // 前の音を破棄！
   const types = ["sine", "triangle", "square", "sawtooth"];
   const randomType = types[Math.floor(Math.random() * types.length)];
-
   synth = new Tone.Synth({
     oscillator: { type: randomType },
     envelope: { attack: 0.01, decay: 0.1, sustain: 0.4, release: 0.5 }
   }).toDestination();
 
-  // 出題（4音以上離す）
+  // 4音以上離れた候補から選ぶ
   const candidates = whiteNotes
     .map((note, i) => ({ note, i }))
     .filter(({ i }) => previousIndex === null || Math.abs(i - previousIndex) >= 4);
@@ -62,6 +65,7 @@ playButton.addEventListener("click", async () => {
   result.innerHTML = `🎛️ <span style="font-size:0.9em; color:#999;">音色: ${randomType}</span><br>どの音かな？クリックしてね♡`;
 });
 
+// 鍵盤をクリックしたときの処理
 function handleClick(note) {
   if (!started) return;
   synth.triggerAttackRelease(note, "1n");
@@ -82,6 +86,7 @@ function handleClick(note) {
   currentNote = null;
 }
 
+// 鍵盤生成（白鍵21音）
 whiteNotes.forEach(note => {
   const name = note.charAt(0);
   const wrapper = document.createElement("div");
