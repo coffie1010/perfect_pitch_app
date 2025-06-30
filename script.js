@@ -45,8 +45,8 @@ playButton.addEventListener("click", async () => {
   // 🔊 音量補正
   let volumeAdjust = 0;
   switch (randomType) {
-    case "sawtooth": volumeAdjust = -20; break;
-    case "square": volumeAdjust = -20; break;
+    case "sawtooth": volumeAdjust = -13; break;
+    case "square": volumeAdjust = -13; break;
     case "triangle": volumeAdjust = -2; break;
     case "sine": volumeAdjust = 0; break;
   }
