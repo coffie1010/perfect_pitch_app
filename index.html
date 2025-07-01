@@ -9,6 +9,15 @@
 </head>
 <body>
   <h1>🎵 絶対音感トレーニング（C3〜C5）</h1>
+  <label for="waveform">🎛 音色を選択：</label>
+<select id="waveform">
+  <option value="random">🎲 ランダム</option>
+  <option value="sine">sine</option>
+  <option value="triangle">triangle</option>
+  <option value="square">square</option>
+  <option value="sawtooth">sawtooth</option>
+</select>
+
   <button id="playNote">▶ 問題を再生</button>
   <div id="keyboard-wrapper"><div id="keyboard"></div></div>
   <div id="result"></div>
